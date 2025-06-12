@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>账号注销</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563eb',
+            secondary: '#4f46e5',
+            success: '#10b981',
+            warning: '#f59e0b',
+            danger: '#ef4444',
+            neutral: '#64748b'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .btn-gradient {
+        @apply bg-gradient-to-r hover:bg-gradient-to-l transition-all duration-300 ease-in-out;
+      }
+      .card-shadow {
+        @apply shadow-lg hover:shadow-xl transition-shadow duration-300;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-primary">账号注销</h1>
+      <div class="w-8"></div> <!-- 占位元素，保持标题居中 -->
+    </div>
+  </nav>
+
+  <!-- 主内容区 -->
+  <main class="flex-grow container mx-auto px-4 py-8">
+    <div class="max-w-md mx-auto">
+      <!-- 警告卡片 -->
+      <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
+        <div class="flex items-start">
+          <div class="flex-shrink-0 pt-0.5">
+            <i class="fa fa-exclamation-triangle text-red-500 text-2xl"></i>
+          </div>
+          <div class="ml-4">
+            <h3 class="text-red-800 font-medium">重要提示</h3>
+            <div class="mt-2 text-sm text-red-700">
+              <p>注销账号将永久删除您在平台的所有数据，包括：</p>
+              <ul class="mt-2 list-disc pl-5 space-y-1">
+                <li>个人账户信息</li>
+                <li>所有菜品评价和评分</li>
+                <li>点赞记录</li>
+                <li>推荐记录</li>
+                <li>此操作无法撤销</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 注销说明卡片 -->
+      <div class="bg-white rounded-xl p-6 mb-6 card-shadow">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">账号注销确认</h3>
+        <p class="text-gray-600 mb-4">点击下方按钮将立即注销您的账号并删除所有相关数据。</p>
+        <p class="text-sm text-red-600 font-medium">请确保您已备份所有重要信息，此操作不可恢复。</p>
+      </div>
+      
+      <!-- 确认和取消按钮 -->
+      <div class="flex flex-col-reverse sm:flex-row sm:justify-between gap-4">
+        <a href="first.html"
+           class="w-full sm:w-auto py-4 px-6 bg-gray-200 text-gray-700 rounded-xl text-lg font-medium text-center hover:bg-gray-300 transition-colors">
+            返回用户中心
+        </a>
+        
+        <button onclick="confirmDelete()" 
+                class="w-full sm:w-auto py-4 px-6 bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-xl text-lg font-semibold btn-gradient card-shadow">
+          <i class="fa fa-trash mr-2"></i>确认注销账号
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white py-6 border-t border-gray-200">
+    <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+      <p>© 2025 CAU美食网. 保留所有权利.</p>
+    </div>
+  </footer>
+
+  <script>
+    function confirmDelete() {
+      if (confirm('您确定要注销账号吗？此操作将永久删除您的所有数据，无法撤销。')) {
+        // 使用动态hostname，适配本地和局域网环境
+        const hostname = window.location.hostname;
+        // 将第112-114行替换为：
+        const baseUrl = 'https://www-school-api.r68031028.nyat.app';
+            
+        // 发送注销请求到后端
+        fetch(`${baseUrl}/api/delete-account`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('账号已成功注销，感谢您的使用！');
+            window.location.href = '../index.html';
+          } else {
+            alert('注销失败：' + data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('注销过程中发生错误，请稍后重试。');
+        });
+      }
+    }
+  </script>
+</body>
+</html>

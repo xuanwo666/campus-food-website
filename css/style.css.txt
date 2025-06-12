@@ -1,0 +1,46 @@
+/* 自定义动画和过渡效果 */
+.scale-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scale-hover:hover {
+    transform: translateY(-5px) scale(1.01);
+}
+
+.transition-custom {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #FF6B35;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #e05c2a;
+}
+
+/* 分类标签激活状态 */
+.category-btn.active {
+    background-color: #FF6B35;
+    color: white;
+}
+
+/* 榜单类型激活状态 */
+.ranking-type-btn.active {
+    background-color: #2EC4B6;
+    color: white;
+}

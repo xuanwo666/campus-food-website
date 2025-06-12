@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563eb',
+            secondary: '#4f46e5',
+            success: '#10b981',
+            warning: '#f59e0b',
+            danger: '#ef4444',
+            neutral: '#64748b'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .btn-gradient {
+        @apply bg-gradient-to-r hover:bg-gradient-to-l transition-all duration-300 ease-in-out;
+      }
+      .card-shadow {
+        @apply shadow-lg hover:shadow-xl transition-shadow duration-300;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-primary flex items-center">
+        <i class="fa fa-user-circle mr-2"></i>用户中心
+      </h1>
+      <div class="flex items-center space-x-4">
+        <a href="../index.html" class="text-primary hover:text-secondary transition-colors">
+          <i class="fa fa-home"></i> 返回首页
+        </a>
+        <span class="text-gray-600 hidden sm:inline">欢迎回来，<span id="username">用户</span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主内容区 -->
+  <main class="flex-grow container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+      <!-- 标题卡片 -->
+      <div class="bg-white rounded-xl p-6 mb-8 card-shadow">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">账户管理</h2>
+        <p class="text-gray-600">在这里管理你的个人信息和账户设置</p>
+      </div>
+      
+      <!-- 功能按钮组 -->
+      <div class="space-y-4">
+        <a href="profile.html" class="block">
+          <button class="w-full py-5 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl text-lg font-semibold flex items-center justify-between btn-gradient card-shadow">
+            <span><i class="fa fa-user-circle mr-3"></i>个人资料</span>
+            <i class="fa fa-chevron-right"></i>
+          </button>
+        </a>
+        
+        <a href="change_password.html" class="block">
+          <button class="w-full py-5 px-6 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-xl text-lg font-semibold flex items-center justify-between btn-gradient card-shadow">
+            <span><i class="fa fa-lock mr-3"></i>更改密码</span>
+            <i class="fa fa-chevron-right"></i>
+          </button>
+        </a>
+        
+        <a href="delete_account.html" class="block">
+          <button class="w-full py-5 px-6 bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-xl text-lg font-semibold flex items-center justify-between btn-gradient card-shadow">
+            <span><i class="fa fa-trash mr-3"></i>账号注销</span>
+            <i class="fa fa-chevron-right"></i>
+          </button>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white py-6 border-t border-gray-200">
+    <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+      <p>© 2025 CAU美食网. 保留所有权利.</p>
+    </div>
+  </footer>
+
+  <script>
+    // 页面加载时获取用户信息
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        // 使用动态hostname，适配本地和局域网环境
+        const hostname = window.location.hostname;
+        // 将第110-112行的baseUrl修改为：
+        const baseUrl = 'https://www-school-api.r68031028.nyat.app:36140';
+            
+        const response = await fetch(`${baseUrl}/api/user`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const userData = await response.json();
+          console.log('API响应数据:', userData);
+          
+          // 根据后端API的实际返回结构：userData.user.username
+          if (userData.success && userData.user && userData.user.username) {
+            document.getElementById('username').textContent = userData.user.username;
+          } else {
+            document.getElementById('username').textContent = '未知用户';
+          }
+        } else {
+          // 如果获取用户信息失败，跳转到登录页面
+          console.log('用户未登录，跳转到登录页面');
+          window.location.href = '../login.html';
+        }
+      } catch (error) {
+        console.error('获取用户信息失败:', error);
+        // 网络错误时也跳转到登录页面
+        window.location.href = '../login.html';
+      }
+    });
+  </script>
+</body>
+</html>
